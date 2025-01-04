@@ -53,6 +53,7 @@ export type ResearchWithInfluencer<T> = Research & {
 };
 
 export type JournalClaim = {
+  id: string;
   claim_id: string;
   journal: string;
   description: string;

@@ -114,14 +114,12 @@ async function InfluencerPageContent(props: { id: string, tab: string }) {
                 </div>
                 <p className="mb-3">{claim.text}</p>
                 {claim.journal_check?.map((check) => (
-                  <div key={check.claim_id} className="mb-3 flex flex-col gap-2">
+                  <div key={check.id} className="mb-3 flex flex-col gap-2">
                     <p className="text-sm text-gray-400 p-3 bg-gray-700 rounded-md">
                       <span className="block text-emerald-500 mb-2">Journal Evidence:</span>
                       {check.evidence}
                     </p>
-                    <div className="mt-2 text-xs text-gray-500">
-                      Added on {new Date(check.created_at).toLocaleDateString()}
-                    </div>
+                    <span className="text-emerald-500 flex justify-end">{check.journal}</span>
                   </div>
                 ))}
                 <div className="flex justify-between items-center text-sm">

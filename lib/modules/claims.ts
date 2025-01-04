@@ -115,26 +115,21 @@ export class ClaimsService {
       .from("journal_claim")
       .select("*")
       .eq("claim_id", claimId)
-      .eq("journal", journal);
+      .eq("journal", journal)
     if (error) throw error;
     return data;
   }
 
   public async getClaimsByJournal(journal: string, influencerId: string) {
     const claims = await this.getByInfluencerId(influencerId);
-    const mappedClaims: ClaimWithJournal[] = await Promise.all(
+    let mappedClaims: ClaimWithJournal[] = await Promise.all(
       claims.map(async (claim) => ({
         ...claim,
         journal_check: await this.getJournalClaimByClaimId(claim.id, journal),
       }))
     );
-    
-    // Filter claims that have journal checks
-    const filteredClaims = mappedClaims.filter(claim => 
-      claim.journal_check && claim.journal_check.length > 0
-    );
-    
-    return filteredClaims;
+    mappedClaims = mappedClaims.filter(claim => claim.journal_check.length > 0);
+    return mappedClaims;
   }
 
   public async createJournalVerification(journals: string[], influencerId: string) {
