@@ -10,8 +10,6 @@ export async function createResearchConfigMutation(prevState: any, formData: For
     const data: ResearchConfig = {
       influencer_name: formData.get("influencer_name") as string,
       time_range: formData.get("time_range") as string,
-      include_revenue_analysis:
-        formData.get("include_revenue_analysis") === "true",
       selected_journals: formData.getAll("selected_journals") as string[],
       notes: formData.get("notes") as string,
     };

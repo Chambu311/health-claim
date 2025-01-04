@@ -15,7 +15,6 @@ export interface ResearchConfig {
   influencer_name: string;
   time_range: string;
   selected_journals?: string[];
-  include_revenue_analysis: boolean;
   notes?: string;
 }
 
@@ -103,14 +102,9 @@ export class ResearchService {
         4. Ensure all arrays have at least one item
         5. IMPORTANT: Each claim must have exactly ONE category - do not use | operators in categories
         6. IMPORTANT: The evidence field must be a string that contains the evidence for the claim. Dont include references or citations in the evidence field.
-        
-        Analyze content (social media posts, blog posts, etc.) and identify health claims made by this influencer and products they promote with the following parameters:
+        Analyze content (social media posts, blog posts, etc.) and identify health claims made by this influencer and list products promoted by the influencer with the following parameters:
         - Time Range: ${config.time_range}
-        ${
-          config.include_revenue_analysis
-            ? "- Include revenue analysis for promoted products"
-            : ""
-        }
+        - Include revenue analysis for promoted products
 
         Response schema:
         {
