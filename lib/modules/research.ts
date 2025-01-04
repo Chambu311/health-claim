@@ -144,7 +144,7 @@ export class ResearchService {
       },
       {
         role: "user",
-        content: `Analyze health influencer: ${config.influencer_name} and fact check their health claims
+        content: `Analyze health influencer: ${config.influencer_name} and fact check their health claims. You should decide whether the claims are verified, questionable, or debunked based on empirical evidence.
         
         Additional Context: ${config.notes || "None provided"}`,
       },
