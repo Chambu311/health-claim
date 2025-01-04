@@ -46,23 +46,13 @@ export class ClaimsService {
     return data;
   }
 
-  public async checkClaimWithJournal(claims: Claim[], journals: string) {
-    const prompt = this.buildPromptForJournalVerification(claims, journals);
-    const response = await perplexityService.sendPrompt(prompt);
-    const parsedResponse = perplexityService.parseAiResponse(
-      response.choices[0]?.message?.content || ""
-    ) as any;
-    console.log(parsedResponse.verifications);
-    await this.saveJournalVerification(parsedResponse.verifications);
-    return parsedResponse;
-  }
 
-  public async saveJournalVerification(verifications: JournalVerification[]) {
+  public async saveJournalVerification(verifications: JournalVerification[], selectedJournals: string[]) {
     const mapped = verifications.map((verification) => ({
       claim_id: verification.claim_id,
       verification_status: verification.verification_status,
       evidence: verification.evidence,
-      journal: verification.journal_name,
+      journal: selectedJournals.includes(verification.journal_name) ? verification.journal_name : "Unknown",
     }));
     const { data, error } = await supabase
       .from("journal_claim")
@@ -72,7 +62,7 @@ export class ClaimsService {
     return data;
   }
 
-  private buildPromptForJournalVerification(claims: Claim[], journals: string) {
+  private buildPromptForJournalVerification(claims: Claim[], journals: string[]) {
     return [
       {
         role: "system",
@@ -80,7 +70,7 @@ export class ClaimsService {
         
         Rules:
         1. Response must be valid JSON wrapped in \`\`\`json code blocks
-        2. SUPER IMPORTANT:Each claim must be verified against provided journals (ONLY USE THESE JOURNALS)
+        2. SUPER IMPORTANT: you must search information of the provided journals and verify the claims
         3. If evidence is not found in a specific journal, dont return it
         4. Provide specific evidence and citations
         5. Include confidence score (0-100)
@@ -101,9 +91,9 @@ export class ClaimsService {
       },
       {
         role: "user",
-        content: `Verify these health claims using the following journals:
+        content: `Verify these health claims using the following medical journals (ONLY USE THESE JOURNALS):
         
-        Journals: ${journals}
+        Journals: ${journals.join(", ")}
 
         Claims to verify:
         ${claims
@@ -145,6 +135,16 @@ export class ClaimsService {
     );
     
     return filteredClaims;
+  }
+
+  public async createJournalVerification(journals: string[], influencerId: string) {
+    const claims = await this.getByInfluencerId(influencerId);
+    const prompt = this.buildPromptForJournalVerification(claims, journals);
+    const response = await perplexityService.sendPrompt(prompt);
+    const parsedResponse = perplexityService.parseAiResponse(response.choices[0]?.message?.content || "") as any;
+    console.log(parsedResponse.verifications);
+    await this.saveJournalVerification(parsedResponse.verifications, journals);
+    return parsedResponse;
   }
 }
 

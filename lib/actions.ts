@@ -3,7 +3,6 @@ import { revalidatePath } from 'next/cache';
 import { ResearchConfig, researchService } from './modules/research';
 import { influencerService } from './modules/influencer';
 import { claimsService } from './modules/claims';
-import { Claim } from './types';
 
 export async function createResearchConfigMutation(prevState: any, formData: FormData) {
   try {

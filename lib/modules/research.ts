@@ -50,16 +50,11 @@ export class ResearchService {
         parsedResponse
       );
       await this.createResearchRecord(config, influencerCreated.id);
-      const claims = await claimsService.createRecords(
+      await claimsService.createRecords(
         parsedResponse.healthClaims,
         influencerCreated.id
       );
-      if (config.selected_journals && config.selected_journals.length > 0) {
-        await claimsService.checkClaimWithJournal(
-          claims,
-          config.selected_journals?.join(",") || ""
-        );
-      }
+      await claimsService.createJournalVerification(config.selected_journals || [], influencerCreated.id);
     } catch (error: any) {
       throw new Error(`Error during analysis: ${error.message}`);
     }
@@ -144,7 +139,9 @@ export class ResearchService {
       },
       {
         role: "user",
-        content: `Analyze health influencer: ${config.influencer_name} and fact check their health claims. You should decide whether the claims are verified, questionable, or debunked based on empirical evidence.
+        content: `Analyze health influencer: ${
+          config.influencer_name
+        } and fact check their health claims. You should decide whether the claims are verified, questionable, or debunked based on empirical evidence.
         
         Additional Context: ${config.notes || "None provided"}`,
       },

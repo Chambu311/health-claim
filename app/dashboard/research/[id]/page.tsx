@@ -58,6 +58,12 @@ async function InfluencerPageContent(props: { id: string, tab: string }) {
           subtitle="Total claims"
           valueColor="white"
         />
+        <StatCard
+          title="Verified Claims"
+          value={influencer?.verified_claims || 0}
+          subtitle="Verified claims"
+          valueColor="white"
+        />
       </div>
 
       {/* Journals Section */}
@@ -76,15 +82,34 @@ async function InfluencerPageContent(props: { id: string, tab: string }) {
         <div>
           <h2 className="text-xl font-semibold mb-4">Claims</h2>
           <div className="space-y-4">
-            {/* Show journal claims when a specific journal is selected */}
+            {/* Show default claims when no journal is selected */}
+            {tab === "default" && influencer?.claims.map((claim: any) => (
+              <div key={claim.id} className="bg-gray-800 p-4 rounded-lg hover:bg-gray-700/50 transition-colors">
+                <div className="flex items-center gap-2 mb-3 text-sm text-gray-400">
+                  <div className={`w-2 h-2 rounded-full ${claim.verification_status === 'Verified' ? 'bg-emerald-500' :
+                    claim.verification_status === 'Questionable' ? 'bg-yellow-500' :
+                      'bg-red-500'
+                    }`}></div>
+                  <span>{claim.verification_status}</span>
+                </div>
+                <p className="mb-3">{claim.text}</p>
+                {claim.evidence && (
+                  <p className="text-sm text-gray-400 p-3 bg-gray-700 rounded-md mb-3">{claim.evidence}</p>
+                )}
+                <div className="flex justify-between items-center text-sm">
+                  <span className="text-gray-400">#{claim.category}</span>
+                </div>
+              </div>
+            ))}
+
+            {/* Journal claims */}
             {tab !== "default" && journalClaims?.map((claim: ClaimWithJournal) => (
               <div key={claim.id} className="bg-gray-800 p-4 rounded-lg hover:bg-gray-700/50 transition-colors flex flex-col gap-3">
                 <div className="flex items-center gap-2 mb-3 text-sm text-gray-400">
-                  <div className={`w-2 h-2 rounded-full ${
-                    claim.verification_status === 'Verified' ? 'bg-emerald-500' :
+                  <div className={`w-2 h-2 rounded-full ${claim.verification_status === 'Verified' ? 'bg-emerald-500' :
                     claim.verification_status === 'Questionable' ? 'bg-yellow-500' :
-                    'bg-red-500'
-                  }`}></div>
+                      'bg-red-500'
+                    }`}></div>
                   <span>{claim.verification_status}</span>
                 </div>
                 <p className="mb-3">{claim.text}</p>
@@ -99,27 +124,6 @@ async function InfluencerPageContent(props: { id: string, tab: string }) {
                     </div>
                   </div>
                 ))}
-                <div className="flex justify-between items-center text-sm">
-                  <span className="text-gray-400">#{claim.category}</span>
-                </div>
-              </div>
-            ))}
-
-            {/* Show default claims when no journal is selected */}
-            {tab === "default" && influencer?.claims.map((claim: any) => (
-              <div key={claim.id} className="bg-gray-800 p-4 rounded-lg hover:bg-gray-700/50 transition-colors">
-                <div className="flex items-center gap-2 mb-3 text-sm text-gray-400">
-                  <div className={`w-2 h-2 rounded-full ${
-                    claim.verification_status === 'Verified' ? 'bg-emerald-500' :
-                    claim.verification_status === 'Questionable' ? 'bg-yellow-500' :
-                    'bg-red-500'
-                  }`}></div>
-                  <span>{claim.verification_status}</span>
-                </div>
-                <p className="mb-3">{claim.text}</p>
-                {claim.evidence && (
-                  <p className="text-sm text-gray-400 p-3 bg-gray-700 rounded-md mb-3">{claim.evidence}</p>
-                )}
                 <div className="flex justify-between items-center text-sm">
                   <span className="text-gray-400">#{claim.category}</span>
                 </div>
@@ -141,7 +145,7 @@ async function InfluencerPageContent(props: { id: string, tab: string }) {
                 <p className="text-sm text-gray-400 mb-2">{product.description}</p>
                 {product.url && (
                   <a href={product.url} target="_blank" rel="noopener noreferrer"
-                     className="text-sm text-emerald-500 hover:underline">
+                    className="text-sm text-emerald-500 hover:underline">
                     View Product →
                   </a>
                 )}
