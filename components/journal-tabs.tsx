@@ -3,6 +3,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { useTransition } from "react";
 
 export default function JournalTabs(props: { journals: string[], activeJournal: string }) {
+    console.log(props.activeJournal === 'default')
     const router = useRouter();
     const pathname = usePathname();
     return (

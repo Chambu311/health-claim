@@ -52,7 +52,9 @@ export class ClaimsService {
       claim_id: verification.claim_id,
       verification_status: verification.verification_status,
       evidence: verification.evidence,
-      journal: selectedJournals.includes(verification.journal_name) ? verification.journal_name : "Unknown",
+      journal: selectedJournals.find(journal => 
+        verification.journal_name?.toLowerCase().includes(journal.toLowerCase())
+      ),
     }));
     const { data, error } = await supabase
       .from("journal_claim")
@@ -75,7 +77,8 @@ export class ClaimsService {
         4. Provide specific evidence and citations
         5. Include confidence score (0-100)
         6. Keep responses concise and factual
-        
+        7. the journal_name in the json must be a single journal, dont include multiple journals
+        8. the journal_name must be the name of the journal, not the full name
         Required JSON format:
         {
           "verifications": [
