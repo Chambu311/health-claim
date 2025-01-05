@@ -73,6 +73,7 @@ export interface InfluencerTableRow {
   score: number;
   trend: 'up' | 'down';
   verified_claims: number;
+  debunked_claims: number;
 }
 
 

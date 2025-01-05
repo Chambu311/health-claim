@@ -31,6 +31,7 @@ export class InfluencerService {
       score: influencer.trust_score,
       trend: this.calculateTrend(influencer),
       verified_claims: influencer.verified_claims,
+      debunked_claims: influencer.debunked_claims,
     };
   }
 

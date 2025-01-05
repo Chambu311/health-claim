@@ -71,10 +71,10 @@ async function InfluencerLeaderboardContent() {
               <tr className="text-left text-sm text-gray-400 border-b border-gray-700">
                 <th className="p-4 font-medium">#</th>
                 <th className="p-4 font-medium">INFLUENCER</th>
-                <th className="p-4 font-medium">CATEGORY</th>
                 <th className="p-4 font-medium">TRUST SCORE</th>
                 <th className="p-4 font-medium">TREND</th>
                 <th className="p-4 font-medium">VERIFIED CLAIMS</th>
+                <th className="p-4 font-medium">DEBUNKED CLAIMS</th>
               </tr>
             </thead>
             <tbody>
@@ -87,7 +87,6 @@ async function InfluencerLeaderboardContent() {
                       <span>{row.influencer?.name}</span>
                     </Link>
                   </td>
-                  <td className="p-4">{row.influencer?.category}</td>
                   <td className="p-4">
                     <div className="flex items-center gap-2">
                       <div className="w-8 h-1 bg-emerald-500 rounded-full"></div>
@@ -100,6 +99,7 @@ async function InfluencerLeaderboardContent() {
                     </svg>
                   </td>
                   <td className="p-4">{row.influencer?.verified_claims}</td>
+                  <td className="p-4">{row.influencer?.debunked_claims}</td>
                 </tr>
               ))}
             </tbody>
