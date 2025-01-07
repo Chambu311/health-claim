@@ -25,8 +25,8 @@ export default function ResearchConfiguration() {
   useEffect(() => {
     if (state?.message) {
       toast.info(state?.message)
-      if (state.message.includes("completed successfully")) {
-        router.push(`/dashboard`)
+      if (state?.success) {
+        router.push(`/dashboard/research/${state.data}`)
       }
     }
   }, [state]);

@@ -14,16 +14,19 @@ export async function createResearchConfigMutation(prevState: any, formData: For
       notes: formData.get("notes") as string,
     };
 
-    await researchService.analyzeInfluencer(data);
+    const newResearch = await researchService.analyzeInfluencer(data);
     revalidatePath("/dashboard");
-    return { 
-      message: "Research configuration and analysis completed successfully!", 
+    return {
+      success: true,
+      message: "Research configuration and analysis completed successfully!",
+      data: newResearch.id,
     };
   } catch (error) {
     console.error("Error during analysis:", error);
     return { 
       message: "Error during analysis", 
-      error: (error as Error).message 
+      error: (error as Error).message,
+      data: null,
     };
   }
 }

@@ -140,7 +140,6 @@ export class ClaimsService {
     const prompt = this.buildPromptForJournalVerification(claims, journals);
     const response = await perplexityService.sendPrompt(prompt);
     const parsedResponse = perplexityService.parseAiResponse(response.choices[0]?.message?.content || "") as any;
-    console.log(parsedResponse.verifications);
     await this.saveJournalVerification(parsedResponse.verifications, journals);
     return parsedResponse;
   }

@@ -48,12 +48,13 @@ export class ResearchService {
       const influencerCreated = await influencerService.createRecord(
         parsedResponse
       );
-      await this.createResearchRecord(config, influencerCreated.id);
+      const researchCreated = await this.createResearchRecord(config, influencerCreated.id);
       await claimsService.createRecords(
         parsedResponse.healthClaims,
         influencerCreated.id
       );
       await claimsService.createJournalVerification(config.selected_journals || [], influencerCreated.id);
+      return researchCreated;
     } catch (error: any) {
       throw new Error(`Error during analysis: ${error.message}`);
     }
